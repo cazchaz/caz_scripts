@@ -1,0 +1,10 @@
+WITH fxd
+AS (SELECT CAST(fx.event_data AS XML) AS Event_Data
+    FROM sys.fn_xe_file_target_read_file(N'system_health*.xel', NULL, NULL, NULL) AS fx )
+SELECT dl.deadlockgraph
+FROM
+(
+    SELECT dl.query('.') AS deadlockgraph
+    FROM fxd
+        CROSS APPLY event_data.nodes('(/event/data/value/deadlock)') AS d(dl)
+) AS dl;

@@ -1,0 +1,15 @@
+SELECT EPS.name, SPS.STATE,
+
+CONVERT(nvarchar(38),
+
+SUSER_NAME(SPS.grantor_principal_id))AS [GRANTED BY],
+
+SPS.TYPE AS PERMISSION,
+
+CONVERT(nvarchar(46),SUSER_NAME(SPS.grantee_principal_id))AS [GRANTED TO]
+
+FROM sys.server_permissions SPS , sys.endpoints EPS
+
+WHERE SPS.major_id = EPS.endpoint_id
+
+ORDER BY Permission,[GRANTED BY], [GRANTED TO]
